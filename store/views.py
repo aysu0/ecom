@@ -1,11 +1,31 @@
 from django.shortcuts import render, redirect
-from .models import Product, Category
+from .models import Product, Category, Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 from django import forms
+
+def update_info(request):
+    if request.user.is_authenticated:
+        #get profile from database that has id of whoever is requesting --> request.user.id = current user that is logged in
+        current_user = Profile.objects.get(user__id=request.user.id)
+        #when user goes on to profile page, it will already have their current information on there
+        form = UserInfoForm(request.POST or None, instance=current_user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your Info Has Been Updated!")
+            return redirect('home')
+        return render(request, 'update_info.html', {'form': form})
+    else:
+        messages.success(request, "You Must Be Logged In To Access That Page!")
+        return redirect('home')
+    
+
+
+
 
 def update_password(request):
     if request.user.is_authenticated:
@@ -115,8 +135,9 @@ def register_user(request):
             #log user in
             user = authenticate(username=username, password=password)
             login(request, user)
-            messages.success(request, ("You Have Registered Sucessfully!"))
-            return redirect('home')
+            #instead of just registering user, redirect them to fill out the user info form so that it's like a continuous sign up.
+            messages.success(request, ("Username Created, Please Fill Out Your User Information Below...!"))
+            return redirect('update_info')
         else:
             messages.success(request, ("There Was A Probloem Registering, Please Try Again!"))
             return redirect('register')
