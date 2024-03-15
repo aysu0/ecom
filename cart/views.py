@@ -31,7 +31,40 @@ def cart_add(request):
         # response = JsonResponse({'Product Name: ': product.name})
         response = JsonResponse({'qty': cart_quantity})
         messages.success(request, ("Product Added To Cart!"))
-        return response 
+        return response
+
+# def cart_add(request):
+#     # Get the cart
+#     cart = Cart(request)
+    
+#     # Test for POST
+#     if request.POST.get('action') == 'post':
+#         # Get product details from POST data
+#         product_id = int(request.POST.get('product_id'))
+#         product_qty = int(request.POST.get('product_qty'))
+        
+#         # Lookup product in database
+#         product = get_object_or_404(Product, id=product_id)
+        
+#         # Check if the product is already in the cart
+#         if cart.has_product(product_id):
+#             # Product already in cart, send message
+#             messages.info(request, ("Item already in cart."))
+#         else:
+#             # Add product to cart
+#             cart.add(product=product, quantity=product_qty)
+#             messages.success(request, "Product added to cart!")
+    
+#     return JsonResponse({'success': True})
+
+#     # Get cart quantity
+#     cart_quantity = cart.__len__()
+
+#     # Return response
+#     response = JsonResponse({'qty': cart_quantity})
+#     return response
+
+
 
 
 

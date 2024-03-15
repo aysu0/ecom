@@ -84,3 +84,8 @@ class Cart():
                     else:
                         total = total + (product.price * value)
         return total
+
+
+    # def has_product(self, product_id):
+    #     # Check if the product is already in the cart
+    #     return product_id in self.cart
