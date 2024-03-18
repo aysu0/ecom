@@ -1,10 +1,11 @@
-from store.models import Product
+from store.models import Product, Profile
 
 
 class Cart():
     def __init__(self, request):
         self.session = request.session
-
+        #get request
+        self.request = request
         #get current session key if exists
         cart = self.session.get('session_key')
 
@@ -12,7 +13,7 @@ class Cart():
         if 'session_key' not in request.session:
             cart = self.session['session_key'] = {}
         
-        #make sure cqart is available on all pages of site
+        #make sure cart is available on all pages of site
         self.cart = cart 
 
     def add(self, product, quantity):
@@ -27,6 +28,15 @@ class Cart():
             self.cart[product_id] = int(product_qty)
 
         self.session.modified = True
+        #deal with logged in user
+        if self.request.user.is_authenticated:
+            #get current user profile
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+            #convert {'3':2, '2':4} to {"3":2, "2":4}
+            carty = str(self.cart) #no longer a python dictionary, just a string
+            carty = carty.replace("\'", "\"")
+            #save carty to profile model
+            current_user.update(old_cart=str(carty))
 
     def __len__(self):
         return len(self.cart)
