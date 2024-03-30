@@ -24,7 +24,6 @@ class Cart():
         if product_id in self.cart:
             pass
         else:
-            # self.cart[product_id] = {'price': str(product.price)}
             self.cart[product_id] = int(product_qty)
 
         self.session.modified = True
@@ -141,6 +140,3 @@ class Cart():
         return total
 
 
-    # def has_product(self, product_id):
-    #     # Check if the product is already in the cart
-    #     return product_id in self.cart
