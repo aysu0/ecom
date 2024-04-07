@@ -3,12 +3,12 @@
 
 {% block content %}
 <!-- Header with Banner -->
-<header class="py-5" style="background-image: url('{% static "assets/banner2.png" %}'); background-size: cover; background-position: center; height: 60vh;"></header>
+<header class="py-5" style="background-image: url('{% static "assets/banner3.png" %}'); background-size: cover; background-position: center; height: 60vh;"></header>
 
 <!-- Section: Products -->
-<section class="py-5" style="background-color: #F8F7D2">
+<section class="py-5" style="background-color: #FFFFED">
     <div class="container px-4 px-lg-5 mt-5">
-        <h2 class="text-center mb-4" style="font-family: 'Arial', sans-serif; color: #007bff; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">All Products</h2>
+        <h2 class="text-center mb-4" style="font-family: 'Arial', sans-serif; color: black; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">All Products</h2>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for product in products %}
             <div class="col">

@@ -1,16 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load static %}
     <!-- Header-->
-    <header class="bg-dark py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Update Profile</h1>
-                <p class="lead fw-normal text-white-50 mb-0">Update User Profile</p>
-            </div>
-        </div>
-    </header>
+    <header class="py-5" style="background-image: url('{% static "assets/updateprofile.png" %}'); background-size: cover; background-position: center; height: 60vh;"></header>
 
+<section class="py-5" style="background-color: #FFFFED">
     <div class="container">
         <div class="row">
                 <div class="col-md-6 offset-md-3">
@@ -24,17 +19,14 @@
                         <br/><br/>
                         <button type="submit" class="btn btn-secondary">Update Profile</button>
                      </form>
-                     <br/><br/>
+                     <br/>
                      <a href="{% url 'update_password' %}" class="btn btn-success">Update Password</a>
                     <br/><br/><br/>
                     <br/><br/>
-                    <br/><br/>
-                    <br/><br/>
-                    <br/><br/>
-                </div>
-                     
+                </div>    
         </div>
     </div>
+</section>
 
 
 {% endblock %}

@@ -4,13 +4,35 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm, ContactForm
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 from django import forms
 from django.db.models import Q
 import json
 from cart.cart import Cart
+from django.views.generic import FormView
+
+
+class ContactFormView(FormView):
+    form_class = ContactForm
+    template_name = 'contact.html'
+    def get_context_data(self, **kwargs):
+        context = super(ContactFormView, self).get_context_data(**kwargs)
+        context.update({'title':'Contact Us'})
+        return context
+    
+    def form_valid(self, form):
+        form.send_mail()
+        messages.success(self.request, 'Successfully sent the enquiry')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.warning(self.request, 'Unable to send the enquiry') 
+        return super().form_invalid(form)
+    
+    def get_success_url(self):
+        return self.request.path
 
 def search(request):
         #determine if they filled out form
@@ -184,7 +206,7 @@ def register_user(request):
             messages.success(request, ("Username Created, Please Fill Out Your User Information Below...!"))
             return redirect('update_info')
         else:
-            messages.success(request, ("There Was A Probloem Registering, Please Try Again!"))
+            messages.success(request, ("There Was A Problem Registering, Please Try Again!"))
             return redirect('register')
     else: 
         return render(request, 'register.html', {'form':form})

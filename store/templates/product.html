@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<section class="py-5" style="background-color: #FFFFED">
     <div class="container">
                     <br/><br/><br/>
                     <div class="card mb-3">
@@ -21,11 +21,9 @@
                                 <div class="bi-star-fill"></div>
                             </div>
                             <!-- Product price-->
-                            <strike>
-                                £{{product.price}} 
-                            </strike>
+                            <p class="text-muted"><strike>£{{ product.price }}</strike> <span class="text-danger">£{{ product.sale_price }}</span></p>
+
                             &nbsp;
-                            £{{product.sale_price}} 
                             {% else %}
                             £{{ product.price }}
                   
@@ -45,22 +43,20 @@
                             </div>
                             <br/><br/>
 
+                            <div class="d-grid gap-2 col-6 mx-auto mt-3">
                               <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
-                              <button type= "button" value="{{ product.id }}" class= "btn btn-secondary" id="add-cart">Add To Cart</button>
+                              <button type="button" value="{{ product.id }}" class="btn btn-secondary" id="add-cart">Add To Cart</button>
+                            </div>
                             </center>
                             </div>
                           </div>
                         </div>
                       </div>
                       <br/><br/><br/>
-                      <br/><br/><br/>
-                      <br/><br/><br/>
-                      <br/><br/><br/>
-                      <br/><br/><br/>
-                      <br/><br/><br/>
-                      <br/><br/><br/>
+
                     
     </div>
+</section>
 <script>
 //check if button pressed 
 $(document).on('click', '#add-cart', function(e){

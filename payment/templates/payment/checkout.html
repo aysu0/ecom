@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load static %}
         <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Checkout</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Review Your Order</p>
-                </div>
-            </div>
-        </header>
+        <header class="py-5" style="background-image: url('{% static "assets/checkout.png" %}'); background-size: cover; background-position: center; height: 60vh;"></header>
+
+    <section class="py-5" style="background-color: #FFFFED">        
         <br/>
         <div class="container">
             <div class="row">
@@ -53,8 +49,11 @@
                         <a href="#" class="btn btn-secondary">Continue To Billing</a>
                     </div>
             </div>
-        </div>
-        <br/><br/><br/><br/>
+        </div>       
+         <br/><br/><br/><br/>
+    </section>
+
+
 
 
 {% endblock %}
