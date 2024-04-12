@@ -1,21 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- Header-->
-    <header class="bg-dark py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Login</h1>
-                <p class="lead fw-normal text-white-50 mb-0">Login to your account</p>
-            </div>
-        </div>
-    </header>
 
     <div class="container">
         <div class="row">
             <center>
                 <div class="col-8">
                     <br/><br/><br/><br/>
+                    <h1 class="display-9 fw-bolder">Login</h1>
+                    <p class="lead fw-normal text-secondary-50 mb-0">Sign in to your account below</p>
+                </br>
                     <form method="POST" action="{% url 'login' %}">
                         {% csrf_token %}
                         <div class="mb-3">
@@ -26,12 +20,13 @@
                         </div>
                         <br/><br/>
                         <div class="border-top pt-3">
-                            <p class="text-muted" style="font-size: 16px;">Need to create an account? <a class="ml-2" href="{% url 'register' %}">Register</a></p>
+                            <p class="text-muted" style="font-size: 16px;">Need to create an account? <a class="ml-2" href="{% url 'register' %}" class="text-muted">Register</a></p>
+                            <p class="text-muted" style="font-size: 16px;">Forgot Your Password? <a class="ml-2" href="{% url 'password_reset' %}" class="text-muted">Reset Here</a></p>
                           </div>
                         <button type="submit" class="btn btn-secondary">Login</button>
                       </form>
 
-                    <br/><br/><br/><br/> 
+                    <br/><br/><br/><br/><br/><br/><br/>
                 </div>
                      
             </center>

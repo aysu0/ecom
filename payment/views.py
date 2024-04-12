@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from cart.cart import Cart 
-from payment.forms import ShippingForm 
+from payment.forms import ShippingForm, PurchaseForm
 from payment.models import ShippingAddress
 from django.contrib import messages 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib import messages
 
 
 # def checkout(request):
@@ -58,6 +59,53 @@ def checkout(request):
         "totals": totals,
         "shipping_form": shipping_form
     })
+
+
+def user_billing_information(request):
+    if request.POST:
+
+        # Get cart information
+        cart = Cart(request)
+        cart_products = cart.get_prods()  # Ensure to call the method
+        quantities = cart.get_quants()
+        # Calculate total
+        totals = cart.cart_total()
+
+        #check to see if user is logged in
+        if request.user.is_authenticated:
+            #get billing form 
+            billing = PurchaseForm()
+            return render(request, "payment/user_billing_information.html", {
+            "cart_products": cart_products,
+            "quantities": quantities,
+            "totals": totals,
+            "shipping_information": request.POST,
+            "billing": billing
+        })
+        else: 
+            #get billing form 
+            billing = PurchaseForm()
+            #not logged in
+            return render(request, "payment/user_billing_information.html", {
+            "cart_products": cart_products,
+            "quantities": quantities,
+            "totals": totals,
+            "shipping_information": request.POST,
+            "billing": billing
+
+        })
+
+        shipping_form = request.POST
+
+        return render(request, "payment/user_billing_information.html", {
+            "cart_products": cart_products,
+            "quantities": quantities,
+            "totals": totals,
+            "shipping_form": shipping_form
+        })
+    else: 
+        messages.success(request, "Access Denied")
+        return redirect('home')
 
 
 def payment_success(request):
