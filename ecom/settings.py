@@ -149,5 +149,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'korkmazaysu12@gmail.com'
-EMAIL_HOST_PASSWORD = 'wtzj vdpn iqam lroy'
+EMAIL_HOST_USER = 'startoyskitchen@gmail.com'
+EMAIL_HOST_PASSWORD = 'ckcr izsn wjnm khdj'

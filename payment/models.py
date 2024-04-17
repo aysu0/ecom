@@ -22,19 +22,19 @@ class ShippingAddress(models.Model):
         return f'Shipping Address - {str(self.id)}'
     
 
-#Create a Shipping address by default when user signs up
+#create shipping address by default when user signs up
 def create_shipping(sender, instance, created, **kwargs):
     if created: 
         user_shipping = ShippingAddress(user=instance)
         user_shipping.save()
 
-#Automate profile
+#automate profile creation
 post_save.connect(create_shipping, sender=User)
     
 
 #create order model
 class Order(models.Model):
-    #foreign key
+    #foreign key relationships
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=250)
     email = models.EmailField(max_length=250)
@@ -47,7 +47,7 @@ class Order(models.Model):
 
 #create order items model
 class OrderItem(models.Model):
-    #foreign keys
+    #foreign key relationships
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     products = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

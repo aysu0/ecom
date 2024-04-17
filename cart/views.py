@@ -4,7 +4,7 @@ from store.models import Product
 from django.http import JsonResponse
 from django.contrib import messages
 
-def cart_summary(request):
+def shoppingcart_summary(request):
     #get cart
     cart = Cart(request)
     cart_products = cart.get_prods
@@ -12,7 +12,7 @@ def cart_summary(request):
     totals = cart.cart_total()
     return render(request, "cart_summary.html", {"cart_products": cart_products, "quantities": quantities, "totals": totals})
 
-def cart_add(request):
+def shoppingcart_add(request):
     #get the cart
     cart = Cart(request)
     #test for POST
@@ -34,7 +34,7 @@ def cart_add(request):
         return response
 
 
-def cart_delete(request):
+def shoppingcart_delete(request):
     cart = Cart(request)
     if request.POST.get('action') == 'post':
         #get stuff
@@ -48,7 +48,7 @@ def cart_delete(request):
 
 
 
-def cart_update(request):
+def shoppingcart_update(request):
     cart = Cart(request)
     if request.POST.get('action') == 'post':
         # get id, quantity

@@ -7,6 +7,7 @@
         <div class="container mt-5">
             <h2 class="fw-bold mb-4">Results for: {{ searched_item }}</h2>
         </div>
+
     {% endif %}
 
     <!-- Searched Products -->
@@ -15,7 +16,7 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 justify-content-center mt-5">
                 {% for product in searched %}
                     <div class="col mb-5">
-                        <div class="card h-100">
+                        <div class="card h-100 shadow">
                             {% if product.is_sale %}
                                 <div class="badge bg-danger text-white position-absolute top-0 start-0 mt-3 ms-3">Sale</div>
                             {% endif %}
@@ -36,8 +37,7 @@
                     </div>
                 {% endfor %}
             </div>
-        </div>    
-        </br></br>
+        </div> </br></br>    
     </section>
     {% endif %}
 {% endblock %}
