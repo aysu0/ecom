@@ -68,7 +68,24 @@
                             </div>
                         </div>
                         </br>
-                            <button type= "submit" class="btn btn-secondary">Pay Now</button>
+                        <!-- <button type="submit" class="btn btn-secondary">
+                            Pay Now
+                          </button> -->
+                            <a href="#" id="buy-now" class="btn btn-secondary">Pay Now</a>
+
+                            <script src="https://js.stripe.com/v3/"></script>
+                            <script>
+                                var stripe = Stripe('{{ stripe_public_key }}');
+                                const buy_now = document.querySelector('#buy-now')
+                                buy_now.addEventListener('click', event => {
+
+                                stripe.redirectToCheckout({
+                                    sessionId: '{{ session_id }}'
+                                }).then(function (result){
+
+                                });
+                            })
+                            </script>
                             </form>
                 </div>
             </div>

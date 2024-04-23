@@ -6,10 +6,15 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from store.models import Product
 from django.contrib.auth.models import User
-
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from paypal.standard.forms import PayPalPaymentsForm
+import stripe
 
 def checkout(request):
+
     #get cart information
     cart = Cart(request)
     cart_products = cart.get_prods()  # Ensure to call the method
@@ -37,11 +42,12 @@ def checkout(request):
         "cart_products": cart_products,
         "quantities": quantities,
         "totals": totals,
-        "shipping_form": shipping_form
+        "shipping_form": shipping_form,
     })
 
 
 def user_billing_information(request):
+
     if request.POST:
 
         #get cart information
@@ -56,6 +62,10 @@ def user_billing_information(request):
         request.session['shipping'] = shipping
 
 
+
+
+
+
         #check to see if user is logged in
         if request.user.is_authenticated:
             #get billing form 
@@ -66,7 +76,11 @@ def user_billing_information(request):
             "quantities": quantities,
             "totals": totals,
             "shipping_information": request.POST,
-            "billing": billing
+            "billing": billing,
+          
+          
+            # "paypalpayment": paypalpayment
+
         })
         else: 
             #get billing form 
@@ -78,7 +92,8 @@ def user_billing_information(request):
             "quantities": quantities,
             "totals": totals,
             "shipping_information": request.POST,
-            "billing": billing
+            "billing": billing,
+            # "paypalpayment": paypalpayment
 
         })
 
@@ -96,12 +111,19 @@ def user_billing_information(request):
         return redirect('home')
 
 
+def payment_success(request):
+    return render(request, "payment/payment_success.html", {})
+
+def payment_failed(request):
+    return render(request, "payment/payment_failed.html", {})
+
 def handle_order(request):
+
     if request.POST:
         #get cart information
         cart = Cart(request)
-        cart_products = cart.get_prods()  # Ensure to call the method
-        quantities = cart.get_quants()
+        cart_products = cart.get_prods # Ensure to call the method
+        quantities = cart.get_quants
         #calculate total
         totals = cart.cart_total()
 
@@ -123,6 +145,20 @@ def handle_order(request):
             createorder = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid)
             createorder.save()
 
+            order_id = createorder.pk
+
+            for product in cart_products():
+                product_id = product.id
+                if product.is_sale:
+                    price = product.sale_price
+                else:
+                    price = product.price
+
+                for key,value in quantities().items():
+                    if int(key)== product.id:
+                        createorder_item=OrderItem(order_id=order_id, products_id=product_id, user=user, quantity=value, price=price)
+                        createorder_item.save()
+
             messages.success(request, "Order Placed!")
             return redirect('home')
         
@@ -130,6 +166,20 @@ def handle_order(request):
             #not logged in
             createorder = Order(full_name=full_name, email=email, shipping_address=shipping_address, amount_paid=amount_paid)
             createorder.save()
+
+            order_id = createorder.pk
+            for product in cart_products():
+                product_id = product.id
+                if product.is_sale:
+                    price = product.sale_price
+                else:
+                    price = product.price
+
+            for key,value in quantities().items():
+                    if int(key)== product.id:
+                        createorder_item=OrderItem(order_id=order_id, products_id=product_id, user=user, quantity=value, price=price)
+                        createorder_item.save()
+
 
             messages.success(request, "Order Placed!")
             return redirect('home')
@@ -139,5 +189,59 @@ def handle_order(request):
         return redirect('home')
 
 
-def payment_success(request):
-    return render(request, "payment/payment_success.html", {})
+##### This is what i got from online tutorial ####
+# def index(request):
+#     stripe.api_key = settings.STRIPE_PRIVATE_KEY
+
+#     session = stripe.checkout.Session.create(
+#         payment_method_types=['card'],
+#         line_items=[{
+#             'price': '{{PRICE_ID}}',
+#             'quantity': 1,
+#         }],
+#         mode='payment',
+#         success_url='https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
+#         cancel_url='https://example.com/cancel',
+#     )
+#     return render(request, 'home.html')
+
+#### This is what i tried myself to get the whole cart ####
+def index(request):
+    stripe.api_key = settings.STRIPE_PRIVATE_KEY
+
+    # Get products from the cart
+    cart = Cart(request)
+    cart_items = cart.get_prods()
+
+    # Construct line items for the Stripe session
+    line_items = []
+    for item in cart_items:
+        product = item['product']
+        line_item = {
+            'price_data': {
+                'currency': 'gbp',  # Change currency as needed
+                'unit_amount': int(Product.price * 100),  # Stripe requires amount in cents
+                'product_data': {
+                    'name': Product.name,  # Adjust this according to your product model
+                },
+            },
+            'quantity': item['quantity'],
+        }
+        line_items.append(line_item)
+
+    # Create Stripe checkout session
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=line_items,
+        mode='payment',
+        success_url=request.build_absolute_uri(reverse('payment_success')) + '?session_id={CHECKOUT_SESSION_ID}',
+        cancel_url=request.build_absolute_uri(reverse('payment_failed')),
+    )
+    context = {
+        'session_id' : session.id,
+        'stripe_public_key' : settings.STRIPE_PUBLIC_KEY,
+    }
+    print(settings.STRIPE_PUBLIC_KEY)
+    return render(request, 'home.html', context)
+
+

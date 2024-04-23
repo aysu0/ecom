@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'payment',
     'crispy_forms',
     'crispy_bootstrap4',
+    # 'paypal.standard.ipn', 
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,10 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'startoyskitchen@gmail.com'
 EMAIL_HOST_PASSWORD = 'ckcr izsn wjnm khdj'
+
+
+# PAYPAL_RECEIVER_EMAIL = 'startoyskitchen@gmail.com'
+# PAYPAL_TEST = True
+
+STRIPE_PUBLIC_KEY = 'pk_test_51P8PSr011hqwXpZ4zx0xAARVQh7Tk8UmglO3g9bG6YtOMbcKoLEF05XsRuALRGIIAMZAJxrKmKTyAW5ANDjr1zg300mIcYxpgk'
+STRIPE_PRIVATE_KEY = 'sk_test_51P8PSr011hqwXpZ4wtVbASooISMTCjkihlN24JOJ2t3HDaMaJs6BidBsDeyvJ2MXmYrJ9R6QG7xOXNDkfgMeE2dv00RknBTPmx'

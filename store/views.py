@@ -53,31 +53,6 @@ def search_product(request):
             return render(request, "search.html", {})
         
 
-# def search_product(request):
-#     # Get the searched item from the form submission
-#     if request.method == "POST":
-#         searched_item = request.POST.get('searched', None)
-#         if searched_item:
-#             # Query products database model
-#             searched_results = Product.objects.filter(Q(name__icontains=searched_item) | Q(description__icontains=searched_item))
-#             # Paginate the search results
-#             paginator = Paginator(searched_results, 4)  # 10 items per page
-#             page_number = request.GET.get('page')
-#             try:
-#                 searched_results = paginator.page(page_number)
-#             except PageNotAnInteger:
-#                 searched_results = paginator.page(1)
-#             except EmptyPage:
-#                 searched_results = paginator.page(paginator.num_pages)
-#             # Pass the paginated results to the template
-#             return render(request, "search.html", {'searched': searched_results, 'searched_item': searched_item})
-#         else:
-#             # If no search term provided, return an empty search page
-#             return render(request, "search.html", {})
-#     else:
-#         return render(request, "search.html", {})
-
-
 def category_summary(request):
     #grab everything from category model
     categories = Category.objects.all()
@@ -89,7 +64,7 @@ def product(request,pk):
 
 def home(request):
     products_list = Product.objects.all()
-    paginator = Paginator(products_list, 10)  #show 10 prods per page
+    paginator = Paginator(products_list, 12)  #show 10 prods per page
 
     page = request.GET.get('page')
     try:
