@@ -44,7 +44,7 @@ class UpdateUserForm(UserChangeForm):
     email = forms.EmailField(
         label="",
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
-        required=False
+        required=False #not mandatory
     )
     first_name = forms.CharField(
         label="",

@@ -5,16 +5,19 @@
         <!-- Header-->
         <header class="py-5" style="background-image: url('{% static "assets/checkout.png" %}'); background-size: cover; background-position: center; height: 60vh;"></header>
 
+    <!-- checkout section -->
     <section class="py-5" style="background-color: #FFFFED">        
         <br/>
         <div class="container">
             <div class="row">
+                    <!-- card layout for order summary -->
                     <div class="col-md-6 offset-md-3">
                         <div class="card">
                             <div class="card-header">
                               Order Summary 
                             </div>
                             <div class="card-body">
+                                <!-- iterate over cart products to display their details -->
                                 {% for product in cart_products %}
                                     {{ product.name }}:
                                         {% if product.is_sale %}
@@ -23,6 +26,7 @@
                                              £{{ product.price }}
                                     {% endif %}
                                     <br/>
+                                    <!-- show quantity of each product -->
                                     <small>Quantity: 
                                     {% for key, value in quantities.items %}
                                         {% if key == product.id|slugify %}
@@ -31,25 +35,29 @@
                                     {% endfor %}</small>
                                     <br/><br/>
                                 {% endfor %}
+                                <!-- display total cost of all products in the cart -->
                                 Total:  £{{ totals }}
                                 <br/><br/>
+                                        <!-- button that updates items in the cart -->
                                         <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
                             </div>
                           </div>
                         <br/><br/>
+                        <!-- card layout for shipping information -->
                         <div class="card">
                             <div class="card-header">
                             Shipping Information
                             </div>
                             <div class="card-body">
+                                <!--form for capturing shipping information -->
                                 <form method ="POST" action="{% url 'user_billing_information' %}">
                                     {% csrf_token %}
+                                    <!-- rendering shipping form fields -->
                                     {{ shipping_form.as_p }}
-
-                          
                             </div>
                         </div>
                         <br/><br/>
+                        <!-- button to submit shipping information and proceed to billing -->
                         <button type ="submit" class="btn btn-secondary">Continue To Billing</button>
                         </form>
                     </div>
@@ -57,8 +65,4 @@
         </div>       
          <br/><br/><br/><br/>
     </section>
-
-
-
-
 {% endblock %}

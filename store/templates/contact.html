@@ -20,8 +20,10 @@
                         <form method="POST">
                             {% csrf_token %}
                             <div class="mb-3">
+                                <!-- Form using django's crispy for better layout -->
                                 {{ form|crispy }}
                             </div>
+                            <!-- Submit button -->
                             <button class="btn btn-secondary btn-lg" type="submit">Submit</button>
                         </form>
                     </div>

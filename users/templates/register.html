@@ -1,33 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <!-- Header-->
-    <!-- <header class="bg-dark py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Register</h1>
-                <p class="lead fw-normal text-white-50 mb-0">Create An Account</p>
-            </div>
-        </div>
-    </header> -->
 
     <div class="container">
         <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    
                     <br/><br/><br/>
-
+                    <!-- Headers -->
                     <h2 class="display-9 fw-bolder text-center">Create Account</h2>
                     <p class="lead fw-normal text-secondary-50 mb-0 text-center">Register With Us!</p>
                     <br/>
+                    <!-- Register Form -->
                     <form method="POST" action="{% url 'register' %}">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <br/>
                         <center>
                             <div class="border-top pt-3">
+                                <!-- If they already have an account, link to login -->
                                 <p class="text-muted" style="font-size: 16px;">Already have an account? <a class="ml-2" href="{% url 'login' %}" class="text-muted">Login</a></p>
                             </div>
+                            <!-- Submit Register Button -->
                             <button type="submit" class="btn btn-secondary">Register</button>
                         </center>
                     </form>

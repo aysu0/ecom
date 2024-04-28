@@ -12,6 +12,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.forms import PayPalPaymentsForm
 import stripe
+import random
 
 def checkout(request):
 
@@ -61,10 +62,16 @@ def user_billing_information(request):
         shipping = request.POST
         request.session['shipping'] = shipping
 
-
-
-
-
+        # Store shipping information in session
+        request.session['shipping'] = {
+            'shipping_full_name': shipping['shipping_full_name'],
+            'shipping_email': shipping['shipping_email'],
+            'shipping_address1': shipping['shipping_address1'],
+            'shipping_address2': shipping['shipping_address2'],
+            'shipping_city': shipping['shipping_city'],
+            'shipping_postcode': shipping['shipping_postcode'],
+            'shipping_country': shipping['shipping_country'],
+        }
 
         #check to see if user is logged in
         if request.user.is_authenticated:
@@ -78,8 +85,6 @@ def user_billing_information(request):
             "shipping_information": request.POST,
             "billing": billing,
           
-          
-            # "paypalpayment": paypalpayment
 
         })
         else: 
@@ -93,9 +98,9 @@ def user_billing_information(request):
             "totals": totals,
             "shipping_information": request.POST,
             "billing": billing,
-            # "paypalpayment": paypalpayment
 
         })
+        
 
         shipping_form = request.POST
 
@@ -111,8 +116,28 @@ def user_billing_information(request):
         return redirect('home')
 
 
+
 def payment_success(request):
-    return render(request, "payment/payment_success.html", {})
+    # #get cart information
+    # client_ref = 'Cust'
+    # client_ref_id = f'{client_ref}_{random.getrandbits(4)}'
+    cart = Cart(request)
+    cart_products = cart.get_prods()  #ensure to call the method
+    quantities = cart.get_quants()
+    #calculate total
+    totals = cart.cart_total()
+
+    # Retrieve shipping information from session
+    shipping_information = request.session.get('shipping', {})
+    
+    return render(request, "payment/payment_success.html", {
+        "shipping_information": shipping_information,
+        "cart_products": cart_products,
+        "quantities": quantities,
+        "totals": totals,
+        # "client_ref_id": client_ref_id,
+    })
+
 
 def payment_failed(request):
     return render(request, "payment/payment_failed.html", {})
@@ -126,6 +151,7 @@ def handle_order(request):
         quantities = cart.get_quants
         #calculate total
         totals = cart.cart_total()
+        orderDict = {}
 
         #get billing info
         payment = PurchaseForm(request.POST or None)
@@ -157,10 +183,15 @@ def handle_order(request):
                 for key,value in quantities().items():
                     if int(key)== product.id:
                         createorder_item=OrderItem(order_id=order_id, products_id=product_id, user=user, quantity=value, price=price)
+                        # print(createorder_item)
                         createorder_item.save()
+                        orderDict[product_id]= {'price': price, 'quantity':value, 'product_id' :product_id, 'name': product.name}
+
+
+
 
             messages.success(request, "Order Placed!")
-            return redirect('home')
+            # return redirect('home')
         
         else: 
             #not logged in
@@ -175,73 +206,64 @@ def handle_order(request):
                 else:
                     price = product.price
 
-            for key,value in quantities().items():
-                    if int(key)== product.id:
-                        createorder_item=OrderItem(order_id=order_id, products_id=product_id, user=user, quantity=value, price=price)
-                        createorder_item.save()
+                for key,value in quantities().items():
+                        
+                        if int(key)== product.id:
+                            createorder_item=OrderItem(order_id=order_id, products_id=product_id, quantity=value, price=price)
+                            createorder_item.save()
+                            orderDict[product_id]= {'price': price, 'quantity':value, 'product_id' :product_id, 'name': product.name}
 
 
-            messages.success(request, "Order Placed!")
-            return redirect('home')
+
+       
+        return orderDict
+        
 
     else:
         messages.success(request, "Access Denied")
         return redirect('home')
 
 
-##### This is what i got from online tutorial ####
-# def index(request):
-#     stripe.api_key = settings.STRIPE_PRIVATE_KEY
 
-#     session = stripe.checkout.Session.create(
-#         payment_method_types=['card'],
-#         line_items=[{
-#             'price': '{{PRICE_ID}}',
-#             'quantity': 1,
-#         }],
-#         mode='payment',
-#         success_url='https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
-#         cancel_url='https://example.com/cancel',
-#     )
-#     return render(request, 'home.html')
+def createStripePayment(request):
+    orderDict = handle_order(request)
 
-#### This is what i tried myself to get the whole cart ####
-def index(request):
     stripe.api_key = settings.STRIPE_PRIVATE_KEY
 
-    # Get products from the cart
-    cart = Cart(request)
-    cart_items = cart.get_prods()
-
-    # Construct line items for the Stripe session
     line_items = []
-    for item in cart_items:
-        product = item['product']
+
+    for item, val in orderDict.items():
         line_item = {
             'price_data': {
-                'currency': 'gbp',  # Change currency as needed
-                'unit_amount': int(Product.price * 100),  # Stripe requires amount in cents
-                'product_data': {
-                    'name': Product.name,  # Adjust this according to your product model
+            'currency': 'gbp',
+            'product_data': {
+                'name': val['name'],
                 },
+                'unit_amount': int(val['price']*100),
             },
-            'quantity': item['quantity'],
+            'quantity': 1,
+                    
         }
         line_items.append(line_item)
 
     # Create Stripe checkout session
     session = stripe.checkout.Session.create(
+        client_reference_id = createCustref(request),
         payment_method_types=['card'],
+        currency= 'GBP',      
         line_items=line_items,
         mode='payment',
+
         success_url=request.build_absolute_uri(reverse('payment_success')) + '?session_id={CHECKOUT_SESSION_ID}',
         cancel_url=request.build_absolute_uri(reverse('payment_failed')),
     )
-    context = {
-        'session_id' : session.id,
-        'stripe_public_key' : settings.STRIPE_PUBLIC_KEY,
-    }
-    print(settings.STRIPE_PUBLIC_KEY)
-    return render(request, 'home.html', context)
+    print(session)
+    return redirect(session.url, code=303)
 
 
+def createCustref(request):
+        
+        client_ref = 'Cust'
+        client_ref_id = f'{client_ref}_{random.getrandbits(4)}'
+        return client_ref_id
+        print(client_ref_id)

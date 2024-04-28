@@ -2,27 +2,30 @@
 
 {% block content %}
 <section class="py-5" style="background-color: #FFFFED">
+  <div class="container my-4">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Maximum Items:</strong> You may only buy up to 5 of the same item in each order.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
     <div class="container">
                     <br/><br/><br/>
                     <div class="card mb-3 shadow">
                         <div class="row g-0">
                           <div class="col-md-4" >
+                            <!-- Image of the product uploaded through admin -->
                             <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
                           </div>
                           <div class="col-md-8">
                             <div class="card-body">
                               <center>
+                                <!-- Name, age, description and price of the product using bootstrap design -->
                               <h5 class="card-title">{{ product.name }}</h5>
                               <p class="card-text">{{ product.description }}.</p>
                             {% if product.is_sale %}
-                            <div class="d-flex justify-content-center small text-warning mb-2">
-                                <div class="bi-star-fill"></div>
-                                    &nbsp;&nbsp;Sale!&nbsp;&nbsp;
-                                <div class="bi-star-fill"></div>
-                            </div>
                             <!-- Product price-->
                             <p class="text-muted"><strike>£{{ product.price }}</strike> <span class="text-danger">£{{ product.sale_price }}</span></p>
-
+                            <div class="badge bg-danger text-white position-absolute top-0 start-0 mt-3 ms-3">Sale</div>
                             &nbsp;
                             {% else %}
                             £{{ product.price }}
@@ -30,6 +33,7 @@
                             {% endif %}
                             <br/><br/>
                             <div class ="row justify-content-center">
+                              <!-- Users can buy up to 5 quantities of each item -->
                               <div class ="col-md-2">Quantity</div>
                               <div class="col-md-2">
                               <select class="form-select form-select-sm" id ="qty-cart">
@@ -44,6 +48,7 @@
                             <br/><br/>
 
                             <div class="d-grid gap-2 col-6 mx-auto mt-3">
+                              <!-- Users can add item to cart or click 'home' to go back to homepage -->
                               <a href="{% url 'home' %}" class="btn btn-secondary">Home</a>
                               <button type="button" value="{{ product.id }}" class="btn btn-secondary" id="add-cart">Add To Cart</button>
                             </div>
@@ -61,19 +66,20 @@
 <script>
 //check if button pressed 
 $(document).on('click', '#add-cart', function(e){
-  e.preventDefault();
+  e.preventDefault();  
+  //send an AJAX request to add the product to the cart
   $.ajax({
     type: 'POST',
-    url: '{% url "cart_add" %}',
+    url: '{% url "cart_add" %}', //URL to the view handling cart addition
     data: {
-      product_id: $('#add-cart').val(),
-      product_qty: $('#qty-cart option:selected').text(),
-      csrfmiddlewaretoken:'{{ csrf_token }}',
-      action: 'post'
+      product_id: $('#add-cart').val(), //get the product ID
+      product_qty: $('#qty-cart option:selected').text(), //get the selected quantity
+      csrfmiddlewaretoken:'{{ csrf_token }}', //add CSRF token for security
+      action: 'post' //specify action
     },
 
     success: function(json){
-     //console.log(json)
+      //if cart addition successful, update cart quantity display and reload the page
      document.getElementById("cart_quantity").textContent = json.qty
      location.reload();
 
@@ -85,10 +91,6 @@ $(document).on('click', '#add-cart', function(e){
 
   });
 })
-
-
-
-
 </script>
 
 {% endblock %}

@@ -14,10 +14,13 @@ from django.shortcuts import render, redirect
 import json
 
 
-class CustomPasswordResetView(PasswordResetView):   
+class CustomPasswordResetView(PasswordResetView):  
+    #using the custompasswordreset form from forms.py
     form_class = CustomPasswordResetForm
     template_name = 'password_reset_form.html'  
+    #if password reset is successful, redirect to passwordresetdone.html
     success_url = reverse_lazy('password_reset_done')  
+    #the email that gets sent to the user
     email_template_name = 'password_reset_email.html'
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
@@ -51,6 +54,7 @@ def update_information(request):
 
             messages.success(request, "Your Information Has Been Updated Successfully!")
             return redirect('home')
+        #pass in the user form and shipping form to the page
         return render(request, 'update_info.html', {'form': user_form, 'shipping_form': shipping_form})
     else:
         messages.success(request, "You Must Be Logged In To Access This Page!")

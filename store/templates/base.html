@@ -13,11 +13,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
 </head>
-<body class="bg-light-blue"> <!-- Change here -->
+<body class="bg-light-blue">
     
     {% include 'navbar.html' %}
     {% if messages %}
@@ -31,18 +32,14 @@
     {% block content %}
     {% endblock %}
 
-
 <!-- Footer -->
 <footer class="text-center text-sm-start bg-body-tertiary text-white" style="background-color: #7E7B7B;">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-sm-between p-3 border-bottom">
-      <!-- Left -->
+      <!-- Social media links -->
       <div class="me-3 d-none d-sm-block">
         <span style="font-size: smaller;">Get connected with us on social networks:</span>
       </div>
-      <!-- Left -->
-  
-      <!-- Right -->
       <div>
         <a href="https://www.facebook.com/StarToysandKitchen/" class="me-3 text-reset">
           <i class="fab fa-facebook-f"></i>
@@ -51,33 +48,34 @@
           <i class="fab fa-instagram"></i>
         </a>
       </div>
-      <!-- Right -->
     </section>
     <!-- Section: Social media -->
-  
-    <!-- Section: Links  -->
+
+    <!-- Section: Links -->
     <section class="">
       <div class="container text-center text-sm-start mt-4">
         <!-- Grid row -->
         <div class="row mt-3">
-          <!-- Grid column -->
+          <!-- About section -->
           <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-            <!-- Content -->
+            <!-- Company info -->
             <h6 class="text-uppercase fw-bold mb-3">
               <i class="fas fa-gem me-2"></i>Star Toys and Kitchen
             </h6>
+            <!-- Company description -->
             <p style="font-size: smaller;">
               Find products we don't have in stock online! Either sign up to order or purchase as a guest!
             </p>
           </div>
-          <!-- Grid column -->
-  
-          <!-- Grid column -->
+          <!-- About section -->
+
+          <!-- Opening times section -->
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-            <!-- Links -->
+            <!-- Opening times -->
             <h6 class="text-uppercase fw-bold mb-3">
               Opening Times
             </h6>
+            <!-- Days and hours -->
             <p style="font-size: smaller;">
               <a>Monday: 8am-5:30pm</a></br>
               <a>Tuesday: 8am-5:30pm</a></br>
@@ -88,14 +86,15 @@
               <a>Sunday: Closed</a>
             </p>
           </div>
-          <!-- Grid column -->
-  
-          <!-- Grid column -->
+          <!-- Opening times section -->
+
+          <!-- Useful links section -->
           <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
             <!-- Links -->
             <h6 class="text-uppercase fw-bold mb-3">
               Useful links
             </h6>
+            <!-- Navigation links -->
             <p style="font-size: smaller;">
               <a href="{% url 'register' %}" class="text-reset">Register</a>
             </p>
@@ -109,11 +108,11 @@
               <a href="{% url 'about' %}" class="text-reset">About Us</a>
             </p>
           </div>
-          <!-- Grid column -->
-  
-          <!-- Grid column -->
+          <!-- Useful links section -->
+
+          <!-- Contact section -->
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-            <!-- Links -->
+            <!-- Contact info -->
             <h6 class="text-uppercase fw-bold mb-3">Contact</h6>
             <p style="font-size: smaller;"><i class="fas fa-home me-2"></i> Stall 78, The Moor Market, 80 Earl St, Sheffield City Centre, Sheffield S1 4PF</p>
             <p style="font-size: smaller;">
@@ -122,13 +121,13 @@
             </p>
             <p style="font-size: smaller;"><i class="fas fa-phone me-2"></i> 07799 276408</p>
           </div>
-          <!-- Grid column -->
+          <!-- Contact section -->
         </div>
         <!-- Grid row -->
       </div>
     </section>
-    <!-- Section: Links  -->
-  
+    <!-- Section: Links -->
+
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05); font-size: smaller;">
       © 2024 Copyright:

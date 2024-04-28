@@ -2,19 +2,21 @@
 
 {% block content %}
 {% load static %}
-        <!-- Header-->
         <header class="py-5" style="background-image: url('{% static "assets/checkout.png" %}'); background-size: cover; background-position: center; height: 60vh;"></header>
 
+    <!-- section for main content -->
     <section class="py-5" style="background-color: #FFFFED">        
         <br/>
         <div class="container">
             <div class="row">
                     <div class="col-md-6 offset-md-3">
+                        <!-- card for order summary -->
                         <div class="card">
                             <div class="card-header">
                               Order Summary 
                             </div>
                             <div class="card-body">
+                                <!-- showing each product in the cart with its price and quantity -->
                                 {% for product in cart_products %}
                                     {{ product.name }}:
                                         {% if product.is_sale %}
@@ -23,6 +25,7 @@
                                              £{{ product.price }}
                                     {% endif %}
                                     <br/>
+                                    <!-- display quantity of each product -->
                                     <small>Quantity: 
                                     {% for key, value in quantities.items %}
                                         {% if key == product.id|slugify %}
@@ -31,9 +34,11 @@
                                     {% endfor %}</small>
                                     <br/><br/>
                                 {% endfor %}
+                                <!-- show total price of the cart -->
                                 Total:  £{{ totals }}
                                 <br/><br/>
-                                        <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
+                                <!-- button to update items in the cart -->
+                                <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
                             </div>
                           </div>
                         <br/><br/>
@@ -42,6 +47,7 @@
                             Shipping Information
                             </div>
                             <div class="card-body">
+                                <!-- displaying shipping information -->
                                 Name: {{ shipping_information.shipping_full_name }}</br>
                                 Email: {{ shipping_information.shipping_email }}</br>
                                 Address 1: {{ shipping_information.shipping_address1 }}</br>
@@ -50,33 +56,32 @@
                                 Postcode: {{ shipping_information.shipping_postcode }}</br>
                                 Country: {{ shipping_information.shipping_country}}</br>
                             </br>
+                            <!-- button to update shipping information -->
                             <a href="{% url 'checkout' %}" class="btn btn-outline-secondary">Update Shipping </a>
                             </div>
                         </div>
                         <br/><br/>
-
-
 
                         <div class="card">
                             <div class="card-header">
                                 Billing Information
                             </div>
                             <div class="card-body">
+                            <!-- form for billing information -->
                             <form method="POST" action="{% url 'handle_order' %}">
                                 {% csrf_token %}
+                                <!-- billing information -->
                                {{ billing.as_p }}
                             </div>
                         </div>
                         </br>
-                            <button type= "submit" class="btn btn-secondary">Pay Now</button>
+                        <!--submit payment -->
+                        <button type= "submit" class="btn btn-secondary">Pay Now</button>
                             </form>
                 </div>
             </div>
         </div>       
          <br/><br/><br/><br/>
     </section>
-
-
-
 
 {% endblock %}

@@ -14,6 +14,7 @@
                         <div class="card-body" style="background-color: #f8f9fa;">
                             <h2 class="card-title text-center mb-4">Explore Categories</h2>
                             <div class="list-group">
+                                <!-- Loop through categories to display them in a list -->
                                 {% for category in categories %}
                                     <a href="{% url 'category' category %}" class="list-group-item list-group-item-action py-3" style="background-color: #fff;">
                                         <h5 class="mb-0">{{ category }}</h5>

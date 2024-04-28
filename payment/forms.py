@@ -1,6 +1,7 @@
 from django import forms
 from .models import ShippingAddress
 
+#shipping form
 class ShippingForm(forms.ModelForm):
     shipping_full_name = forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name '}), required=True)
     shipping_email = forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}), required=True)
@@ -26,3 +27,4 @@ class PurchaseForm(forms.Form):
     credit_card_city = forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Billing City'}), required=True)
     credit_card_postcode = forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Billing Postcode'}), required=True)
     credit_card_country = forms.CharField(label="", widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Billing Country'}), required=True)
+    stripeToken = forms.CharField(widget=forms.HiddenInput)

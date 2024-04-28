@@ -57,21 +57,19 @@
 
 
 
-                        <div class="card">
-                            <div class="card-header">
-                                Billing Information
-                            </div>
-                            <div class="card-body">
-                            <form method="POST" action="{% url 'handle_order' %}">
+                            <form method="POST" action="{% url 'payment-session' %}">
                                 {% csrf_token %}
-                               {{ billing.as_p }}
+
+                               <button type="submit" class="btn btn-secondary">
+                                Payment Checkout
+                              </button>
+                            </form>
+                     
                             </div>
                         </div>
                         </br>
-                        <!-- <button type="submit" class="btn btn-secondary">
-                            Pay Now
-                          </button> -->
-                            <a href="#" id="buy-now" class="btn btn-secondary">Pay Now</a>
+                       
+                            <!-- <a href="#" id="buy-now" class="btn btn-secondary">Pay Now</a>
 
                             <script src="https://js.stripe.com/v3/"></script>
                             <script>
@@ -85,9 +83,8 @@
 
                                 });
                             })
-                            </script>
-                            </form>
-                </div>
+                            </script> -->
+                           
             </div>
         </div>       
          <br/><br/><br/><br/>

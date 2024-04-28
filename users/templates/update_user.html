@@ -9,17 +9,19 @@
     <div class="container">
         <div class="row">
                 <div class="col-md-6 offset-md-3">
-                    
                     <br/><br/>
+                    <!-- User Update Profile Form -->
                     <form method="POST" action="{% url 'update_user' %}">
                         {% csrf_token %}
-                    
+                        <!-- Display User Form -->
                         {{ user_form.as_p }}
 
                         <br/><br/>
+                        <!-- Submit Button -->
                         <button type="submit" class="btn btn-secondary">Update Profile</button>
                      </form>
                      <br/>
+                     <!-- Link to Update Password -->
                      <a href="{% url 'update_password' %}" class="btn btn-success">Update Password</a>
                     <br/><br/><br/>
                     <br/><br/>
