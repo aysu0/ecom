@@ -50,7 +50,7 @@ def search_product(request):
                 #if item exists, display item on search page 
                 return render(request, "search.html", {'searched': searched_results, 'searched_item': searched_item})
         else:
-            return render(request, "search.html", {})
+            return render(request, "search.html", {}) 
         
 
 def category_summary(request):

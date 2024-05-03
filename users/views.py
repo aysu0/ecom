@@ -142,7 +142,7 @@ def login_customer(request):
                 #shopping cart
                 current_user = Profile.objects.get(user__id=request.user.id)
                 #get their saved cart from database
-                stored_cart = current_user.old_cart
+                stored_cart = current_user.old_cart 
                 #convert database string to python dictionary
                 #is there anything saved in database and check if something is in there
                 if stored_cart:

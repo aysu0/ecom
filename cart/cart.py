@@ -46,7 +46,6 @@ class Cart():
         if product_id in self.cart:
             pass
         else:
-            # self.cart[product_id] = {'price': str(product.price)}
             self.cart[product_id] = int(product_qty)
 
         self.session.modified = True
@@ -71,6 +70,19 @@ class Cart():
         #return those looked up products
         return products
     
+    def clear(self):
+        #clear cart function for when payment is successsful 
+        self.cart = {}
+        self.session['session_key'] = self.cart #clear session data
+        self.session.modified = True
+
+        #deal with logged in user
+        if self.request.user.is_authenticated:
+            #get current user profile
+            current_user = Profile.objects.filter(user__id=self.request.user.id)
+            #update profile model to clear cart data
+            current_user.update(old_cart="{}")
+
     def get_quants(self):
         quantites = self.cart
         return quantites 
