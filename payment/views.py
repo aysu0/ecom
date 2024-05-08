@@ -118,37 +118,6 @@ def user_billing_information(request):
         messages.success(request, "Access Denied")
         return redirect('home')
 
-
-
-# def payment_success(request):
-#     # client_ref = 'Cust'
-#     # client_ref_id = f'{client_ref}_{random.getrandbits(4)}'    
-
-#     # #get cart information
-#     cart = Cart(request)
-#     cart_products = cart.get_prods()  #ensure to call the method
-#     quantities = cart.get_quants()
-
-#     #calculate total
-#     totals = cart.cart_total()
-#     session_id = request.GET.get('session_id')
-#     # session = stripe.checkout.Session.retrieve(session_id)
-#     # customer_email = session.customer_email
-#     # send_receipt_email(customer_email)
-
-#     # Retrieve shipping information from session
-#     shipping_information = request.session.get('shipping', {})
-#     #clear cart if payment is successful
-#     cart.clear()
-    
-#     return render(request, "payment/payment_success.html", {
-#         "shipping_information": shipping_information,
-#         "cart_products": cart_products,
-#         "quantities": quantities,
-#         "totals": totals,
-#         # "client_ref_id": client_ref_id,
-#     })
-
 def payment_success(request):
     if request.user.is_authenticated:
         user = request.user
@@ -192,10 +161,6 @@ def payment_success(request):
         "client_ref_id": client_ref_id,
     })
 
-
-
-
-
 def payment_failed(request):
     return render(request, "payment/payment_failed.html", {})
 
@@ -229,7 +194,7 @@ def handle_order(request):
             createorder.save()
 
             order_id = createorder.pk
-
+            #iterate over cart products to create order items
             for product in cart_products():
                 product_id = product.id
                 if product.is_sale:
@@ -241,8 +206,9 @@ def handle_order(request):
                     if int(key)== product.id:
                         createorder_item=OrderItem(order_id=order_id, products_id=product_id, user=user, quantity=value, price=price)
                         createorder_item.save()
+                        #add order details to order dictionary 
                         orderDict[product_id]= {'price': price, 'quantity':value, 'product_id' :product_id, 'name': product.name}
-
+            #display success message
             messages.success(request, "Order Placed!")
         
         else: 
@@ -264,10 +230,7 @@ def handle_order(request):
                             createorder_item=OrderItem(order_id=order_id, products_id=product_id, quantity=value, price=price)
                             createorder_item.save()
                             orderDict[product_id]= {'price': price, 'quantity':value, 'product_id' :product_id, 'name': product.name}
-
-
-
-       
+        #return order details dictionary
         return orderDict
         
 
@@ -318,11 +281,6 @@ def createStripePayment(request):
     print(session)
     return redirect(session.url, code=303)
 
-
-# def createCustref(request):
-#         client_ref = 'Cust'
-#         client_ref_id = f'{client_ref}_{random.getrandbits(4)}'
-#         return client_ref_id
 
 def createCustref(user):
     #check if user already has a customer record

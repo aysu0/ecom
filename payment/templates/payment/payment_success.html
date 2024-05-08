@@ -4,25 +4,31 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <!-- Payment Successful Card -->
             <div class="card">
                 <div class="card-header bg-success text-white">
                     <h2 class="mb-0">Payment Successful!</h2>
                 </div>
                 <div class="card-body">
+                    <!-- Order Details -->
                     <div class="mb-4">
                         <h4 class="card-title">Order Details</h4>
+                        <!-- Display customer reference ID and total amount paid -->
                         <p><strong>Customer Reference ID:</strong> {{ client_ref_id }}</p>
                         <p><strong>Total Amount Paid:</strong> £{{ totals }}</p>
                     </div>
                     <hr>
+                    <!-- Shipping Information  -->
                     <div class="mb-4">
                         <h4 class="card-title">Shipping Information</h4>
+                        <!-- Display shipping information -->
                         <p><strong>Name:</strong> {{ shipping_information.shipping_full_name }}</p>
                         <p><strong>Email:</strong> {{ shipping_information.shipping_email }}</p>
                         <p><strong>Shipping Address:</strong><br>{{ shipping_information.shipping_address1 }}, {{ shipping_information.shipping_city }}, {{ shipping_information.shipping_postcode }}</p>
                     </div>
                     <hr>
                     <div>
+                    <!-- Ordered Products  -->
                         <h4 class="card-title">Ordered Products</h4>
                         <ul class="list-group">
                             {% for product in cart_products %}
@@ -47,8 +53,7 @@
                     </div>
                 </div>
             </div>
-        </br></br></br></br>
-
+            </br></br></br></br>
         </div>
     </div>
 </div>

@@ -2,38 +2,48 @@
 
 {% block content %}
 {% load static %}
+<!-- Header -->
 <header class="py-5" style="background-image: url('{% static "assets/viewyourcart.png" %}'); background-size: cover; background-position: center; height: 60vh;"></header>
 
+<!-- Cart Content  -->
 <section class="py-5" style="background-color: #FFFFED">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 {% if cart_products %}
+                    <!-- Iterate over each product in the cart -->
                     {% for product in cart_products %}
+                        <!-- Product Card -->
                         <div class="card mb-3 shadow">
                             <div class="row g-0">
                                 <div class="col-md-4">
+                                    <!-- Product Image -->
                                     <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="{{ product.name }}">
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
+                                        <!-- Product Details -->
                                         <h5 class="card-title">{{ product.name }}</h5>
                                         <p class="card-text">{{ product.description }}</p>
+                                        <!-- Display price -->
                                         {% if product.is_sale %}
                                           <div class="badge bg-danger text-white position-absolute top-0 start-0 mt-3 ms-3">Sale</div>
                                           <p class="text-muted"><strike>£{{ product.price }}</strike> <span class="text-danger">£{{ product.sale_price }}</span></p>
                                         {% else %}
                                             £{{ product.price }}
                                         {% endif %}
+                                        <!-- Quantity selector -->
                                         <div class="row align-items-center">
                                             <div class="col-md-3">Quantity</div>
                                             <div class="col-md-3">
                                                 <select class="form-select form-select-sm" id="select{{ product.id }}">
+                                                    <!-- Display selected quantity -->
                                                     {% for key, value in quantities.items %}
                                                         {% if key == product.id|slugify %}
                                                             <option selected>{{ value }}</option>
                                                         {% endif %}
                                                     {% endfor %}
+                                                    <!-- Dropdown options for quantity -->
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
@@ -41,6 +51,7 @@
                                                     <option value="5">5</option>
                                                 </select>
                                             </div>
+                                            <!-- Buttons for updating and removing product -->
                                             <div class="col-md-6">
                                                 <button type="button" data-index="{{ product.id }}" class="btn btn-secondary update-cart">Update</button>
                                                 <button type="button" data-index="{{ product.id }}" class="btn btn-danger delete-product">Remove</button>
@@ -51,11 +62,13 @@
                             </div>
                         </div>
                     {% endfor %}
+                    <!-- Total and Checkout Button -->
                     <div class="text-end">
                         <h3>Total: £{{ totals }}</h3>
                         <a href="{% url 'checkout' %}" class="btn btn-success">Checkout</a>
                     </div>
                 {% else %}
+                    <!-- Message for empty cart -->
                     <div class="text-center">
                         <p>There's nothing in your cart</p>
                         <a href="{% url 'category_summary' %}" class="btn btn-secondary">Go Browsing</a>
@@ -67,11 +80,11 @@
     <br/>
 </section>
 
+<!-- JavaScript for updating and deleting cart items -->
 <script>
-//update cart
+// Update cart
 $(document).on('click', '.update-cart', function(e){
   e.preventDefault();
-  //grab product.id
   var productid = $(this).data('index');
   $.ajax({
     type: 'POST',
@@ -84,8 +97,6 @@ $(document).on('click', '.update-cart', function(e){
     },
 
     success: function(json){
-     //console.log(json)
-     //document.getElementById("cart_quantity").textContent = json.qty
      location.reload();
     },
 
@@ -96,12 +107,9 @@ $(document).on('click', '.update-cart', function(e){
   });
 })
 
-//delete item
+// Delete item
 $(document).on('click', '.delete-product', function(e){
   e.preventDefault();
-  //grab product.id
-  //var productid = $(this).data('index');
-
   $.ajax({
     type: 'POST',
     url: '{% url "cart_delete" %}',
@@ -112,8 +120,6 @@ $(document).on('click', '.delete-product', function(e){
     },
 
     success: function(json){
-     //console.log(json)
-     //document.getElementById("cart_quantity").textContent = json.qty
      location.reload();
     },
 

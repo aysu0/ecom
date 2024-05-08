@@ -49,15 +49,22 @@ def shoppingcart_delete(request):
 
 
 def shoppingcart_update(request):
+    #create instance of cart object
     cart = Cart(request)
+
+    #check if request method is POST and the action is post 
     if request.POST.get('action') == 'post':
         # get id, quantity
         product_id = int(request.POST.get('product_id'))
         product_qty = int(request.POST.get('product_qty'))
 
+        #update cart with new quantity for specified product
         cart.update(product=product_id, quantity=product_qty)
 
+        #create JSON response with updated quantity 
         response = JsonResponse({'qty':product_qty})
+
+        #display a success message
         messages.success(request, ("Your Cart Has Been Updated!"))
         return response
 
