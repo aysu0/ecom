@@ -23,4 +23,6 @@ Bootstrap: https://getbootstrap.com/
 Stripe: https://stripe.com/gb 
 Pillow: https://pillow.readthedocs.io/en/stable/
 Crispy: https://django-crispy-forms.readthedocs.io/en/latest/
+Gmail: https://www.google.com/intl/en_uk/gmail/about/
+
 
